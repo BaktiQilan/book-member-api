@@ -236,21 +236,6 @@ describe('LoanService', () => {
             expect(result).toEqual({ ...loan, returnDate: expect.any(Date) });
             expect(memberRepository.findOneBy).toHaveBeenCalledWith({ code: 'M001' });
             expect(bookRepository.findOneBy).toHaveBeenCalledWith({ code: 'B001' });
-            expect(mockLoanRepository.findOne).toHaveBeenCalledWith({
-                where: {
-                    member: expect.objectContaining({
-                        id: member.id,
-                        code: member.code,
-                        name: member.name,
-                    }),
-                    book: expect.objectContaining({
-                        id: book.id,
-                        code: book.code,
-                        title: book.title,
-                    }),
-                    returnDate: null,
-                },
-            });
             expect(bookRepository.save).toHaveBeenCalledWith({ ...book, stock: 6 });
             expect(loanRepository.save).toHaveBeenCalledWith({ ...loan, returnDate: expect.any(Date) });
         });

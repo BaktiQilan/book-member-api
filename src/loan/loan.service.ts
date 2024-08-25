@@ -101,6 +101,7 @@ export class LoanService {
 
         const loan = await this.loanRepository.findOne({
             where: { member: member, book: book, returnDate: null },
+            order: { borrowDate: 'DESC' },
         });
 
         if (!loan) {
@@ -114,7 +115,6 @@ export class LoanService {
 
             const penaltyDays = 7;
             if (daysBorrowed > penaltyDays) {
-                // const penalty = daysBorrowed - penaltyDays;
                 await this.applyPenalty(member);
             }
 
@@ -129,7 +129,7 @@ export class LoanService {
     }
 
     private async applyPenalty(member: Member): Promise<void> {
-        const penaltyDuration = 3; // Penalty duration in days
+        const penaltyDuration = 3;
         const penaltyEndDate = new Date();
         penaltyEndDate.setDate(penaltyEndDate.getDate() + penaltyDuration);
 
@@ -182,17 +182,6 @@ export class LoanService {
             }
         });
 
-        // // Gunakan reduce untuk menghitung jumlah buku yang sedang dipinjam oleh setiap member
-        // const result = loans.reduce((acc, loan) => {
-        //     const memberId = loan.member.id;
-        //     if (!acc[memberId]) {
-        //         acc[memberId] = { memberId: memberId, borrowedBooksCount: 0 };
-        //     }
-        //     acc[memberId].borrowedBooksCount++;
-        //     return acc;
-        // }, {});
-
-        // Ubah hasil reduce menjadi array
         return Array.from(memberMap.values());
     }
 }
